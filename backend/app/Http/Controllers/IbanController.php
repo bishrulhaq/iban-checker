@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\IbanData;
+use App\Models\ValidatedIban;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
@@ -15,15 +16,29 @@ class IbanController extends Controller
      */
     public function validateIban(Request $request): JsonResponse
     {
-
         try {
 
             $validatedIBAN = $request->validate([
                 'iban' => ['required']
             ]);
 
+            $validatedWithSteps = $this->validateWithSteps($validatedIBAN['iban']);
+
+            if ($validatedWithSteps === false) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'The IBAN is invalid.'
+                ], 422);
+            }
+
+            ValidatedIban::create([
+                'iban' => $validatedIBAN['iban'],
+                'user_id' => auth()->id()
+            ]);
+
             return response()->json([
-                'message' => $this->validateWithSteps($validatedIBAN['iban'])
+                'status' => true,
+                'message' => 'The IBAN is Valid.'
             ], 200);
 
         } catch (ValidationException $e) {
@@ -75,7 +90,7 @@ class IbanController extends Controller
         }
 
         $remainder = bcmod($digits, '97');
-        return  $remainder == 1;
+        return $remainder == 1;
     }
 
 }
