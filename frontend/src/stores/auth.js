@@ -8,10 +8,7 @@ export const useUserStore = defineStore('auth', {
     }),
     getters: {
         isAuthenticated: (state) => !!state.token,
-        isTokenExpired: (state) => {
-            if (!state.tokenExpiration) return true;
-            return Date.now() > state.tokenExpiration * 1000;
-        }
+        isTokenExpired: (state) => !!state.tokenExpiration
     },
     actions: {
         setToken(token, expiration) {
@@ -33,7 +30,6 @@ export const useUserStore = defineStore('auth', {
             localStorage.removeItem('tokenExpiration');
         },
         async fetchUser() {
-            console.log('fetchUser');
             if (!this.token) return;
 
             try {

@@ -48,6 +48,7 @@
     </nav>
 
     <main class="py-6">
+      <notifications />
       <router-view />
     </main>
   </div>
@@ -56,12 +57,15 @@
 <script setup>
 import { computed } from 'vue';
 import { useUserStore } from './stores/auth';
+import { useRouter } from 'vue-router';
 
 const userStore = useUserStore();
+const router = useRouter();
 
 const isLoggedIn = computed(() => !!userStore.token);
 
 function logout() {
   userStore.reset();
+  router.push('/login');
 }
 </script>

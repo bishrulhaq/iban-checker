@@ -8,61 +8,86 @@
                         Register your account
                     </h1>
 
-                    <form class="space-y-4 md:space-y-6" @submit.prevent="register">
-
-                        <div>
+                    <Form :validation-schema="schema" @submit="register">
+                        <div class="py-2">
                             <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your
                                 Name</label>
-                            <input type="name" v-model="name" placeholder="Name" name="name" id="name"
+                            <Field v-model="name" type="text" name="name" id="name"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                required="">
+                                required="" />
+                            <ErrorMessage name="name" class="error-message" />
                         </div>
 
-                        <div>
+                        <div class="py-2">
                             <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your
                                 email</label>
-                            <input type="email" v-model="email" placeholder="Email" name="email" id="email"
+                            <Field v-model="email" type="email" name="email" id="email"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                required="">
-                        </div>
-                        <div>
-                            <label for="password"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
-                            <input type="password" v-model="password" placeholder="Password" name="password" id="password"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                required="">
+                                required="" />
+                            <ErrorMessage name="email" class="error-message" />
                         </div>
 
-                        <div>
+                        <div class="py-2">
                             <label for="password"
+                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
+                            <Field v-model="password" type="password" name="password" id="password"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                required="" />
+                            <ErrorMessage name="password" class="error-message" />
+                        </div>
+
+                        <div class="py-2">
+                            <label for="password_confirmation"
                                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Confirm
                                 Password</label>
-                            <input type="password" v-model="passwordConfirmation" placeholder="Password" name="password"
-                                id="password"
+                            <Field v-model="passwordConfirmation" type="password" name="password_confirmation"
+                                id="password_confirmation"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                required="">
+                                required="" />
+                            <ErrorMessage name="password_confirmation" class="error-message" />
                         </div>
+
                         <button type="submit"
-                            class="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Register</button>
-                        <p class="text-sm font-light text-gray-500 dark:text-gray-400">
-                            Sign In ? <span @click="$emit('toggleForms')"
+                            class="w-full text-white my-2 bg-blue-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Register</button>
+
+                        <p class="text-sm font-light text-gray-500 dark:text-gray-400 my-2">
+                            Already Have an account, <span @click="$emit('toggleForms')"
                                 class="font-medium text-primary-600 hover:underline dark:text-primary-500">Sign In</span>
                         </p>
-                    </form>
+                    </Form>
                 </div>
             </div>
         </div>
     </section>
 </template>
-  
+
+
 <script setup>
 import { ref } from 'vue';
+import { Field, Form, ErrorMessage, defineRule } from 'vee-validate';
+import * as yup from 'yup';
 import api from '../api/api';
+import { useRouter } from 'vue-router';
 import { useUserStore } from '../stores/auth';
+import { useNotification } from "@kyvg/vue3-notification";
 
-const props = defineProps({
-    showForm: String,
+const schema = yup.object({
+    name: yup.string().min(2, 'Name must be at least 2 characters').required('Name is required'),
+    email: yup.string().email('Please enter a valid email').required('Email is required'),
+    password: yup.string().min(8, 'Password must be at least 8 characters').required('Password is required'),
+    password_confirmation: yup.string().oneOf([yup.ref('password'), null], 'Passwords must match')
 });
+
+defineRule('required', value => {
+    if (!value || value.length === 0) {
+        return 'This field is required';
+    }
+    return true;
+});
+
+const router = useRouter();
+const userStore = useUserStore();
+const { notify } = useNotification();
 
 const name = ref('');
 const email = ref('');
@@ -71,29 +96,32 @@ const passwordConfirmation = ref('');
 
 async function register() {
     try {
-        await api.post('/api/register', {
+        const response = await api.post('/api/register', {
             name: name.value,
             email: email.value,
             password: password.value,
             password_confirmation: passwordConfirmation.value
         });
 
-        this.$notify({
+        userStore.setToken(response.data.token, response.data.expires_in);
+        userStore.setUser(response.data.user);
+
+        notify({
             type: 'success',
             text: 'Registration successful!'
         });
 
-        useUserStore.setToken(response.data.token);
+        router.push('/dashboard');
 
     } catch (error) {
         if (error.response && error.response.data) {
 
-            this.$notify({
+            notify({
                 type: 'error',
                 text: error.response.data.error || error.response.data.message || 'Registration failed'
             });
         } else {
-            this.$notify({
+            notify({
                 type: 'error',
                 text: 'Registration failed'
             });
@@ -101,3 +129,8 @@ async function register() {
     }
 }
 </script>
+<style scoped>
+.error-message {
+    color: red;
+}
+</style>
