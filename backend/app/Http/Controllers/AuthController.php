@@ -22,13 +22,16 @@ class AuthController extends Controller
         }
 
         $user = $request->user();
-
-        $token = $request->user()->createToken('auth_token', $user->getRoleNames()->toArray())->plainTextToken;
+        $token = $user->createToken('auth_token', $user->getRoleNames()->toArray())->plainTextToken;
         $expiration = now()->addMinutes(config('sanctum.expiration'));
 
         return response()->json([
             'token' => $token,
-            'user' => $request->user(),
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email
+            ],
             'expires_in' => $expiration->timestamp
         ], 200);
     }
