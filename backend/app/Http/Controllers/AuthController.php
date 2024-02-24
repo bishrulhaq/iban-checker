@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Crypt;
+use Carbon\Carbon;
 
 class AuthController extends Controller
 {
@@ -22,7 +24,7 @@ class AuthController extends Controller
         }
 
         $user = $request->user();
-        $token = $user->createToken('auth_token', $user->getRoleNames()->toArray())->plainTextToken;
+        $token = $user->createToken(Str::random(10))->plainTextToken;
         $expiration = now()->addMinutes(config('sanctum.expiration'));
 
         return response()->json([

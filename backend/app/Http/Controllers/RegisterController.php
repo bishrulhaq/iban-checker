@@ -27,8 +27,7 @@ class RegisterController extends Controller
             ]);
 
             $user->assignRole('user');
-
-            $token = $user->createToken('auth_token', $user->getRoleNames()->toArray())->plainTextToken;
+            $token = $user->createToken(Str::random(10))->plainTextToken;
             $expiration = now()->addMinutes(config('sanctum.expiration'));
 
             return response()->json([

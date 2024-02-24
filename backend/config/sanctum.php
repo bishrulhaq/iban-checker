@@ -47,7 +47,7 @@ return [
     |
     */
 
-    'expiration' => Carbon::now()->addDays(7),
+    'expiration' => Carbon::now()->addDays(7)->diffInMinutes(),
 
     /*
     |--------------------------------------------------------------------------
