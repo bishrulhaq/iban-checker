@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
-class AuthController extends Controller
+class   AuthController extends Controller
 {
     public function login(Request $request)
     {
