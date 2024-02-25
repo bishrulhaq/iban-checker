@@ -23,11 +23,19 @@
                 class="block py-2 px-3 md:p-0 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:dark:text-blue-500 dark:bg-blue-600 md:dark:bg-transparent"
                 aria-current="page">Dashboard</router-link>
             </li>
+
+            <li v-if="userStore.isAdmin">
+              <router-link to="/validated-iban"
+                class="block py-2 px-3 md:p-0 text-white bg-blue-700 rounded bg-primary-600 md:text-blue-700 md:dark:text-blue-500 dark:bg-blue-600 md:dark:bg-transparent"
+                aria-current="page">Validated IBAN's</router-link>
+            </li>
+
             <li>
               <button @click="logout"
                 class="block py-2 px-3 md:p-0 text-white bg-blue-700 rounded bg-primary-600 md:text-blue-700 md:dark:text-blue-500 dark:bg-blue-600 md:dark:bg-transparent"
                 aria-current="page">Logout</button>
             </li>
+
           </ul>
 
           <ul v-else

@@ -5,6 +5,7 @@
          </h2>
          <p class="mb-8 lg:mb-16 font-light text-center text-gray-500 dark:text-gray-400 sm:text-xl">Welcome to IBAN
             Checker</p>
+         <p class="font-light text-center text-gray-500 dark:text-gray-400 sm:text-lg">Hello {{ userStore.user.name }}</p>
          <Form class="space-y-8" :validation-schema="schema" @submit="validateIBAN">
             <div class="py-2">
                <label for="iban" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Enter IBAN</label>
@@ -32,10 +33,13 @@ import api from '../api/api';
 import { Field, Form, ErrorMessage } from 'vee-validate';
 import * as yup from 'yup';
 import { useNotification } from "@kyvg/vue3-notification";
+import { useUserStore } from '../stores/auth';
 
 const iban = ref('');
 const { notify } = useNotification()
 const validationMessage = ref(null);
+
+const userStore = useUserStore();
 
 const schema = yup.object({
    iban: yup.string().required('IBAN is required')

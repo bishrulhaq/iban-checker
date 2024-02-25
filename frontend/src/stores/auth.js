@@ -3,12 +3,13 @@ import { defineStore } from 'pinia'
 export const useUserStore = defineStore('auth', {
     state: () => ({
         token: localStorage.getItem('authToken') || null,
-        user: JSON.parse(localStorage.getItem('user')) || null,
+        user: JSON.parse(localStorage.getItem('authUser')) || null,
         tokenExpiration: localStorage.getItem('tokenExpiration') ? Number(localStorage.getItem('tokenExpiration')) : null
     }),
     getters: {
         isAuthenticated: (state) => !!state.token,
-        isTokenExpired: (state) => !!state.tokenExpiration
+        isTokenExpired: (state) => !!state.tokenExpiration,
+        isAdmin: (state) => state.user.roles.includes("admin") ?? false
     },
     actions: {
         setToken(token, expiration) {

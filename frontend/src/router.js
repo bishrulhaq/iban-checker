@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from './views/Home.vue'
+import validatedIBAN from './views/ValidatedIBAN.vue'
 import Dashboard from './views/Dashboard.vue'
 import { useUserStore } from './stores/auth';
 
@@ -8,6 +9,8 @@ const routes = [
     { path: '/login', component: Home, meta: { requiresGuest: true } },
     { path: '/register', component: Home, meta: { requiresGuest: true } },
     { path: '/dashboard', component: Dashboard, meta: { requiresAuth: true } },
+    { path: '/validated-iban', component: validatedIBAN, meta: { requiresAdminAuth: true } },
+
 ]
 
 const router = createRouter({
@@ -20,6 +23,8 @@ router.beforeEach((to, from) => {
         return { path: '/' }
     } else if (to.meta.requiresGuest && useUserStore().isAuthenticated && useUserStore().isTokenExpired) {
         return { path: '/dashboard' }
+    } else if (to.meta.requiresAdminAuth && useUserStore().isAuthenticated  === false && useUserStore().isTokenExpired === false && useUserStore().isAdmin === false) {
+        return { path: '/' }
     }
 })
 
