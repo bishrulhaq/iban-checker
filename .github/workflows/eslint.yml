@@ -1,6 +1,9 @@
 name: ESLint Workflow
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [ master, development ] 
+  pull_request: 
 
 jobs:
   eslint:

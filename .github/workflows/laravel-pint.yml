@@ -1,0 +1,20 @@
+name: Laravel Pint
+
+on:
+  push:
+    branches: [ master, development ] 
+  pull_request: 
+
+jobs:
+  laravel_pint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'  # Adjust PHP version as per your project
+      - name: Install dependencies
+        run: cd backend && composer install --prefer-dist --no-progress
+      - name: Run Laravel Pint
+        run: cd backend && ./vendor/bin/pint 
