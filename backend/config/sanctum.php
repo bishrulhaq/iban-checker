@@ -1,6 +1,7 @@
 <?php
 
 use Laravel\Sanctum\Sanctum;
+use Carbon\Carbon;
 
 return [
 
@@ -46,7 +47,7 @@ return [
     |
     */
 
-    'expiration' => null,
+    'expiration' => Carbon::now()->addDays(7)->diffInMinutes(),
 
     /*
     |--------------------------------------------------------------------------
