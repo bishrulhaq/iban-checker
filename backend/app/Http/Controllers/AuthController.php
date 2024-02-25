@@ -32,7 +32,8 @@ class AuthController extends Controller
             'user' => [
                 'id' => $user->id,
                 'name' => $user->name,
-                'email' => $user->email
+                'email' => $user->email,
+                'roles' => $user->getRoleNames()->toArray()
             ],
             'expires_in' => $expiration->timestamp
         ], 200);

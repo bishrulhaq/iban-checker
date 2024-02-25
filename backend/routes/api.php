@@ -13,4 +13,5 @@ Route::post('/register', [RegisterController::class, 'register']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', [AuthController::class, 'getUser']);
     Route::get('/validate-iban', [IbanController::class, 'validateIban']);
+    Route::get('/fetch-validated-iban', [IbanController::class, 'fetchValidatedIban']);
 });

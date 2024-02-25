@@ -93,4 +93,39 @@ class IbanController extends Controller
         return $remainder == 1;
     }
 
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function fetchValidatedIban(Request $request): JsonResponse
+    {
+        $page = $request->input('page', 1);
+        $perPage = 10;
+        $offset = ($page - 1) * $perPage;
+
+        $user = auth()->user();
+        if (!$user->hasRole('admin')) {
+            return response()->json([
+                'message' => 'Unauthorized'
+            ], 403);
+        }
+
+        $validatedIbans = ValidatedIban::orderBy('created_at', 'desc')
+            ->offset($offset)
+            ->limit($perPage)
+            ->get();
+
+        $total = ValidatedIban::count();
+
+        return response()->json([
+            'ibans' => $validatedIbans,
+            'pagination' => [
+                'total' => $total,
+                'per_page' => $perPage,
+                'current_page' => $page,
+                'last_page' => ceil($total / $perPage)
+            ]
+        ]);
+    }
+
 }
