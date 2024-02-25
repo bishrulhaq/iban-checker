@@ -1,0 +1,17 @@
+name: ESLint Workflow
+
+on:
+  push:
+    branches: [ master, development ] 
+  pull_request: 
+
+jobs:
+  eslint:
+    runs-on: ubuntu-latest 
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install dependencies
+        run: npm install --prefix frontend 
+      - name: Run ESLint
+        run: npm run lint --prefix frontend 

@@ -5,21 +5,19 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Crypt;
-use Carbon\Carbon;
 
-class AuthController extends Controller
+class   AuthController extends Controller
 {
     public function login(Request $request)
     {
         $credentials = $request->validate([
             'email' => 'required|string|email',
-            'password' => 'required|string'
+            'password' => 'required|string',
         ]);
 
-        if (!Auth::attempt($credentials)) {
+        if (! Auth::attempt($credentials)) {
             return response()->json([
-                'error' => 'Unauthorized'
+                'error' => 'Unauthorized',
             ], 401);
         }
 
@@ -33,9 +31,9 @@ class AuthController extends Controller
                 'id' => $user->id,
                 'name' => $user->name,
                 'email' => $user->email,
-                'roles' => $user->getRoleNames()->toArray()
+                'roles' => $user->getRoleNames()->toArray(),
             ],
-            'expires_in' => $expiration->timestamp
+            'expires_in' => $expiration->timestamp,
         ], 200);
     }
 
@@ -45,5 +43,4 @@ class AuthController extends Controller
             'user' => $request->user(),
         ]);
     }
-
 }

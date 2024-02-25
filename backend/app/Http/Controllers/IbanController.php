@@ -10,16 +10,12 @@ use Illuminate\Validation\ValidationException;
 
 class IbanController extends Controller
 {
-    /**
-     * @param Request $request
-     * @return JsonResponse
-     */
     public function validateIban(Request $request): JsonResponse
     {
         try {
 
             $validatedIBAN = $request->validate([
-                'iban' => ['required']
+                'iban' => ['required'],
             ]);
 
             $validatedWithSteps = $this->validateWithSteps($validatedIBAN['iban']);
@@ -27,48 +23,46 @@ class IbanController extends Controller
             if ($validatedWithSteps === false) {
                 return response()->json([
                     'status' => false,
-                    'message' => 'The IBAN is invalid.'
+                    'message' => 'The IBAN is invalid.',
                 ], 422);
             }
 
             ValidatedIban::create([
                 'iban' => $validatedIBAN['iban'],
-                'user_id' => auth()->id()
+                'user_id' => auth()->id(),
             ]);
 
             return response()->json([
                 'status' => true,
-                'message' => 'The IBAN is Valid.'
+                'message' => 'The IBAN is Valid.',
             ], 200);
 
         } catch (ValidationException $e) {
             return response()->json([
-                'errors' => $e->validator->errors()
+                'errors' => $e->validator->errors(),
             ], 422);
 
         } catch (\Exception $e) {
             return response()->json([
-                'message' => 'An error occurred.'
+                'message' => 'An error occurred.',
             ], 500);
         }
     }
 
-
     /**
-     * @param $value
      * @return false|string
      */
     public function validateWithSteps($value): bool|string
     {
 
-        if (!preg_match('/^[A-Z]{2}\d{2}[A-Z\d]{1,30}$/', $value)) {
+        if (! preg_match('/^[A-Z]{2}\d{2}[A-Z\d]{1,30}$/', $value)) {
             return false;
         }
 
         $countryCode = substr($value, 0, 2);
         $ibanData = IbanData::where('code', $countryCode)->first();
 
-        if (!$ibanData) {
+        if (! $ibanData) {
             return false;
         }
 
@@ -76,7 +70,7 @@ class IbanController extends Controller
             return false;
         }
 
-        $rearranged = substr($value, 4) . substr($value, 0, 4);
+        $rearranged = substr($value, 4).substr($value, 0, 4);
 
         $digits = '';
 
@@ -90,13 +84,10 @@ class IbanController extends Controller
         }
 
         $remainder = bcmod($digits, '97');
+
         return $remainder == 1;
     }
 
-    /**
-     * @param Request $request
-     * @return JsonResponse
-     */
     public function fetchValidatedIban(Request $request): JsonResponse
     {
         $page = $request->input('page', 1);
@@ -104,9 +95,9 @@ class IbanController extends Controller
         $offset = ($page - 1) * $perPage;
 
         $user = auth()->user();
-        if (!$user->hasRole('admin')) {
+        if (! $user->hasRole('admin')) {
             return response()->json([
-                'message' => 'Unauthorized'
+                'message' => 'Unauthorized',
             ], 403);
         }
 
@@ -123,9 +114,8 @@ class IbanController extends Controller
                 'total' => $total,
                 'per_page' => $perPage,
                 'current_page' => $page,
-                'last_page' => ceil($total / $perPage)
-            ]
+                'last_page' => ceil($total / $perPage),
+            ],
         ]);
     }
-
 }

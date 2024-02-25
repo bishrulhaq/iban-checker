@@ -5,7 +5,6 @@ namespace App\Console\Commands;
 use App\Models\IbanData;
 use GuzzleHttp\Client;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
 use Symfony\Component\DomCrawler\Crawler;
 
 class FetchIbanData extends Command
@@ -16,7 +15,6 @@ class FetchIbanData extends Command
      * @var string
      */
     protected $signature = 'iban:fetch';
-
 
     /**
      * The console command description.
@@ -39,6 +37,7 @@ class FetchIbanData extends Command
 
         if ($crawler->filter('table.table-bordered')->count() === 0) {
             $this->error('Table not found in HTML!');
+
             return;
         }
 
@@ -46,6 +45,7 @@ class FetchIbanData extends Command
 
             if ($node->count() === 0) {
                 $this->warn('No rows found in table!');
+
                 return null;
             }
 
@@ -65,7 +65,6 @@ class FetchIbanData extends Command
             );
 
         }
-
 
         $this->info('IBAN data fetched and stored successfully!');
     }

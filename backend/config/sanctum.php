@@ -1,7 +1,7 @@
 <?php
 
-use Laravel\Sanctum\Sanctum;
 use Carbon\Carbon;
+use Laravel\Sanctum\Sanctum;
 
 return [
 

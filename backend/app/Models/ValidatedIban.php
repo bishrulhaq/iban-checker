@@ -12,7 +12,7 @@ class ValidatedIban extends Model
 
     protected $fillable = [
         'iban',
-        'user_id'
+        'user_id',
     ];
 
     public function user(): BelongsTo

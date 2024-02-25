@@ -13,6 +13,6 @@ class IbanData extends Model
         'country',
         'code',
         'length',
-        'format'
+        'format',
     ];
 }

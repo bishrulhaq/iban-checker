@@ -36,19 +36,19 @@ class RegisterController extends Controller
                     'id' => $user->id,
                     'name' => $user->name,
                     'email' => $user->email,
-                    'roles' => $user->getRoleNames()->toArray()
+                    'roles' => $user->getRoleNames()->toArray(),
                 ],
-                'expires_in' => $expiration->timestamp
+                'expires_in' => $expiration->timestamp,
             ], 200);
 
         } catch (ValidationException $e) {
             return response()->json([
-                'errors' => $e->validator->errors()
+                'errors' => $e->validator->errors(),
             ], 422);
 
         } catch (\Exception $e) {
             return response()->json([
-                'message' => 'An error occurred during registration.'
+                'message' => 'An error occurred during registration.',
             ], 500);
         }
 
