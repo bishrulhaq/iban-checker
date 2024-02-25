@@ -8,6 +8,16 @@ An IBAN validator application allowing users to register, log in, and validate I
 * **Admin Privileges:** Special access for administrative tasks.
 * **IBAN List:** Paginated list of entered IBANs for admins.
 
+
+## Screenshots
+
+### User Registration and Login:
+![Image of Sign In Page](/img/sign_in.png)
+### IBAN Entry and Validation:
+![Image of IBAN Validation](/img/iban_validator.png)
+### IBAN List for Admin:
+![Image of Validate IBAN](/img/validated_iban.png) 
+
 **Installation**
 
 1. **Clone the repository:**
