@@ -2,17 +2,43 @@
 
 An IBAN validator application allowing users to register, log in, and validate IBAN numbers. Users can enter IBANs, which are then validated and stored in a database if valid. Admins have access to a paginated list of entered IBANs.
 
-## 🔐 User Registration and Login
-Sign up with the application to access the IBAN validator. Once registered, users can log in securely, ensuring their data is protected.
+* **User Registration and Login:** Secure user accounts.
+* **IBAN Entry and Validation:** Robust IBAN validation logic.
+* **Data Storage:** Securely store valid IBANs in a database.
+* **Admin Privileges:** Special access for administrative tasks.
+* **IBAN List:** Paginated list of entered IBANs for admins.
 
-## 💼 IBAN Entry and Validation
-Upon logging in, users are directed to a page where they can enter IBAN numbers. Our robust system then validates whether the IBAN entered is valid or not, saving valuable time and effort.
+**Installation**
 
-## 💾 Data Storage
-Validated IBAN numbers are securely stored in our database, ensuring data integrity and accessibility for future reference.
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/bishrulhaq/iban-checker
+   ```
+2. **Backend Setup:**
+   ```bash
+   cd backend
+   composer update
+   ```
+3. **Configure database: Edit .env file with database credentials.**
 
-## 🔑 Admin Privileges
-Admins have special access to the application, allowing them to log in with their credentials. This grants them exclusive rights to oversee and manage the system efficiently.
-
-## 📜 List of IBAN Numbers
-Admins can conveniently view a paginated list displaying all entered IBAN numbers. This feature enables seamless navigation and organization of data.
+4. **Migrations and Seeding:**
+   ```bash
+   php artisan migrate:fresh --seed
+   ```
+5. **Fetch IBAN data:**
+   ```bash
+   php artisan iban:fetch
+   ```
+6. **Start the server:**
+   ```bash 
+   php artisan serve
+   ```
+7. **Frontend Setup:**
+   ```bash
+    cd frontend
+    npm install 
+   ```
+8. **Start development server::**
+   ```bash
+    npm run dev 
+   ```
